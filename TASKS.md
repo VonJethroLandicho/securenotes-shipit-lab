@@ -34,16 +34,16 @@ Your job is to turn every red one green without breaking a green one.
 Files: `app/static/index.html` and `app/static/styles.css`
 Check with: `pytest tests/test_accessibility.py tests/test_performance.py`
 
-- [ ] **TASK 1 — Perceivable.** Add `lang` to `<html>`, a real `<title>`, and
+- [x] **TASK 1 — Perceivable.** Add `lang` to `<html>`, a real `<title>`, and
       `alt` text on both images.
-- [ ] **TASK 2 — Structure & controls.** Make the content a `<main>` landmark,
+- [x] **TASK 2 — Structure & controls.** Make the content a `<main>` landmark,
       fix the heading levels so they don't skip (h1 → h2, not h1 → h3), and turn
       the fake `<div class="btn">` into a real `<button>`.
-- [ ] **TASK 3 — Labels.** Replace the `<span class="fake-label">` text with real
+- [x] **TASK 3 — Labels.** Replace the `<span class="fake-label">` text with real
       `<label for="...">` tied to each input's `id`.
-- [ ] **TASK 4 — Contrast.** In `styles.css`, darken `--ink` and `--brand` until
+- [x] **TASK 4 — Contrast.** In `styles.css`, darken `--ink` and `--brand` until
       both contrast tests pass (WCAG AA = 4.5:1).
-- [ ] **TASK 5 — Performance.** `defer` the script, add `width`/`height` to both
+- [x] **TASK 5 — Performance.** `defer` the script, add `width`/`height` to both
       images, and `loading="lazy"` to the content image.
 
 ## Part B — Ship it on a pipeline (Week 17)
@@ -51,8 +51,8 @@ Check with: `pytest tests/test_accessibility.py tests/test_performance.py`
 File: `.github/workflows/ci.yml`
 Check with: `pytest tests/test_pipeline.py`
 
-- [ ] **TASK 6 — Triggers.** Run the workflow on `push` and `pull_request` to `main`.
-- [ ] **TASK 7 — The job.** One `test` job on `ubuntu-latest` that checks out the
+- [x] **TASK 6 — Triggers.** Run the workflow on `push` and `pull_request` to `main`.
+- [x] **TASK 7 — The job.** One `test` job on `ubuntu-latest` that checks out the
       code, sets up Python, installs `requirements.txt`, and runs `pytest`.
 
 When all three suites pass locally, run the whole thing once more:
@@ -86,5 +86,10 @@ you **Approve** or **Request changes**.
 
 1. Which accessibility fix would a sighted mouse user never notice but a
    screen-reader or keyboard user depends on? Why?
+
+   Replacing the fake `<div class="btn">` with a native `<button>` element (and pairing inputs with explicit `<label for="...">` tags) is virtually unnoticeable to a sighted mouse user because custom CSS styling makes them look identical. However, keyboard and screen-reader users rely fundamentally on semantic HTML because a `<div>` is neither focusable in the natural keyboard tab sequence nor announced as an actionable control by assistive technologies. With native `<button>` and `<label>` elements, keyboard users can navigate to and activate controls using Space and Enter, while screen readers clearly announce the input's purpose and state upon receiving focus.
+
 2. Your pipeline runs the Week 16 checks automatically now. How does that stop a
    teammate from *accidentally* shipping an inaccessible page six weeks from now?
+
+   By integrating the full automated test suite into a GitHub Actions CI workflow that triggers on every `push` and `pull_request` targeting `main`, any regression in accessibility or performance immediately causes the build to fail. Because repository branch protection rules require status checks to pass before merging, a teammate cannot quietly or accidentally merge code that breaks these standards into production. This effectively converts accessibility and performance guidelines into automated, continuous quality gates that are rigorously verified on a clean machine rather than relying on human memory.
